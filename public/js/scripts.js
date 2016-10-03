@@ -39,7 +39,7 @@ $(function() {
             featureType: "road",
             elementType: "geometry",
             stylers: [
-                {visibility: "off"}
+                {visibility: "on"}
             ]
         }
 
@@ -48,7 +48,8 @@ $(function() {
     // options for map
     // https://developers.google.com/maps/documentation/javascript/reference#MapOptions
     var options = {
-        center: {lat: 37.4236, lng: -122.1619}, // Stanford, California
+        // center: {lat: 37.4236, lng: -122.1619}, // Stanford, California
+        center: {lat: 41.4558796, lng: -83.4915397}, // Luckey, Ohio
         disableDefaultUI: true,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         maxZoom: 14,
@@ -74,7 +75,18 @@ $(function() {
  */
 function addMarker(place)
 {
-    // TODO
+    
+    // var marker = new MarkerWithLabel({
+    //   position: place.latitude,
+    //   draggable: true,
+    //   raiseOnDrag: true,
+    //   map: map,
+    //   labelContent: "$425K",
+    //   labelAnchor: new google.maps.Point(22, 0),
+    //   labelClass: "labels", // the CSS class for the label
+    //   labelStyle: {opacity: 0.75}
+    //  });
+    
 }
 
 /**
@@ -108,7 +120,7 @@ function configure()
         source: search,
         templates: {
             empty: "no places found yet",
-            suggestion: _.template("<p>TODO</p>")
+            suggestion: _.template("<p><%- place_name %>, <%- admin_name1 %></p>")
         }
     });
 
@@ -178,7 +190,7 @@ function search(query, cb)
         cb(data);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-
+        
         // log error to browser's console
         console.log(errorThrown.toString());
     });
