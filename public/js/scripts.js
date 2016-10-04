@@ -75,7 +75,7 @@ $(function() {
  */
 function addMarker(place) {
 
-    // Create the markers
+    // Create the markers and add to the array
     var marker = new MarkerWithLabel({
         position: new google.maps.LatLng(place.latitude, place.longitude),
         map: map,
@@ -87,6 +87,8 @@ function addMarker(place) {
             opacity: 0.75
         }
     });
+    
+    markers.push(marker);
 
     // Create the info windows
     var infoWindow = new google.maps.InfoWindow();
@@ -203,7 +205,11 @@ function hideInfo()
  */
 function removeMarkers()
 {
-    // TODO
+    
+    while (markers.length) {
+        markers.pop().setMap(null);
+    }
+    
 }
 
 /**
