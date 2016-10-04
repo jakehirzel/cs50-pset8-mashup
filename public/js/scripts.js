@@ -73,20 +73,52 @@ $(function() {
 /**
  * Adds marker for place to map.
  */
-function addMarker(place)
-{
-    
-    // var marker = new MarkerWithLabel({
-    //   position: place.latitude,
-    //   draggable: true,
-    //   raiseOnDrag: true,
-    //   map: map,
-    //   labelContent: "$425K",
-    //   labelAnchor: new google.maps.Point(22, 0),
-    //   labelClass: "labels", // the CSS class for the label
-    //   labelStyle: {opacity: 0.75}
-    //  });
-    
+function addMarker(place) {
+
+    // Create the markers
+    var marker = new MarkerWithLabel({
+        position: new google.maps.LatLng(place.latitude, place.longitude),
+        map: map,
+        icon: '/img/pset8-news.png',
+        labelContent: place.place_name + ", " + place.admin_code1 + " " + place.postal_code,
+        labelAnchor: new google.maps.Point(0, 0),
+        labelClass: "labels", // the CSS class for the label
+        labelStyle: {
+            opacity: 0.75
+        }
+    });
+
+    // Create the info windows
+    var infoWindow = new google.maps.InfoWindow();
+
+    google.maps.event.addListener(marker, 'click', function() {
+        
+        map.setCenter(marker.getPosition());
+
+        $.getJSON("articles.php", {
+            geo: place.postal_code
+        })
+
+        .done(function(data, textStatus, jqXHR) {
+            // Build up html for info window
+            var content = "<ul>"
+            for (i = 0; i < data.length; i++) {
+                content += "<li><a href='" + data[i].link + "' target='new'>" + data[i].title + "</a></li>";
+            }
+            content += "</ul>"
+            if (data.length == 0) {
+                content = "No news (is good news)!"
+            }
+            showInfo(marker, content);
+        })
+
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            // log error to browser's console
+            console.log(errorThrown.toString());
+        });
+
+    })
+
 }
 
 /**
